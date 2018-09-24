@@ -1,16 +1,22 @@
+require('dotenv').config()
 var https = require('https');
 var request = require('request');
 
+const GOOGLE_KEY = process.env.GOOGLE_KEY; 
+var origin = '396+Brock+Street+Kingston+ON';
+var destination = '1200+Princess+Street+Kingston+ON';
 
-
-
-var directions_Request = "https://maps.googleapis.com/maps/api/directions/json?region=ca&origin=396+Brock+Street+Kingston+ON&destination=99+University+Drive+Kingston+ON&key={key}";
+var directions_Request = `https://maps.googleapis.com/maps/api/directions/json?region=ca&origin=${origin}&destination=${destination}&key=${GOOGLE_KEY}`;
 
 request(directions_Request, function (error, response, directions) {
   if (!error && response.statusCode == 200) {
   	directions = JSON.parse(directions);
   	trip_Duration = directions.routes[0].legs[0].duration.text; 
-  	console.log(trip_Duration);
+  	trip_Directions = directions.routes[0].legs[0].steps
+
+  	for (var i = 0; i < trip_Directions.length; i++) {
+    console.log(trip_Directions[i].html_instructions); 
+}
   }
 });
 
